@@ -7,7 +7,6 @@ The content itself will be fetched from the twitch api
 
 ```
 cp .env.sample .env
-
 ```
 
 ### Install dependencies
