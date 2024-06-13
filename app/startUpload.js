@@ -4,6 +4,7 @@ const { getTwitchAuthToken } = require('./twitch/auth')
 const { getTopDailyFeaturedClips } = require('./twitch/clips')
 const { downloadClips } = require('./video-download-handler/downloadVideos')
 const { mergeVideos } = require('./video-editor/merge-videos')
+const { uploadVideo } = require('./youtube-uploader/upload')
 
 module.exports = { startUpload }
 
@@ -29,5 +30,7 @@ async function startUpload() {
     videosBaseUrl
   })
 
-  console.log(mergeVideoStatus)
+  if (mergeVideoStatus.success) {
+    uploadVideo()
+  }
 }

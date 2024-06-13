@@ -1,10 +1,11 @@
 .DS_Store
 npm-debug.log
 node_modules
+yt-auth
 
 app/video-download-handler/videos
 app/video-editor/intro.mp4
 
-
+output.mp4
 .env
 

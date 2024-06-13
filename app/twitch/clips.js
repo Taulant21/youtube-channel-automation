@@ -12,7 +12,7 @@ async function getTopDailyFeaturedClips({ twitchAuthToken }) {
       // This game id is for League
       game_id: '21779',
       started_at: clipStartTime,
-      is_featured: true,
+      is_featured: false,
       first: 100
     },
     headers: {
