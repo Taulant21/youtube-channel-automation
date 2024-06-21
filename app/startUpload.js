@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 
 const { getTwitchAuthToken } = require('./twitch/auth')
 const { getTopDailyFeaturedClips } = require('./twitch/clips')
@@ -31,6 +32,30 @@ async function startUpload() {
   })
 
   if (mergeVideoStatus.success) {
-    uploadVideo()
+    const uploadResponse = await uploadVideo({
+      credits: mergeVideoStatus.credits
+    })
+
+    console.log(uploadResponse)
+  } else {
+    throw new Error('Error while merging videos')
   }
+
+  if (videosList.length > 0) {
+    cleanUpDownloadedClips({ videosList })
+  }
+}
+
+function cleanUpDownloadedClips({ videosList }) {
+  for (const video of videosList) {
+    fs.unlink(path.join(videosBaseUrl, video), (err) => {
+      if (err) throw err
+    })
+  }
+
+  fs.unlink(path.resolve('output.mp4'), (err) => {
+    if (err) throw err
+  })
+
+  console.log('Clips were deleted')
 }

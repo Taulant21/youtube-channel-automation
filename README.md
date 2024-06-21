@@ -15,6 +15,14 @@ cp .env.sample .env
 npm install
 ```
 
+### Token Requirements
+Get google console credentials and also a refresh token and put them on the dir below
+How to acquire credentials: https://developers.google.com/workspace/guides/create-credentials
+How to acquire a refreshToken: https://developers.google.com/identity/protocols/oauth2
+
+app/youtube-uploader/token.json
+app/youtube-uploader/credentials.json
+
 ## Starting the project
 
 ```
