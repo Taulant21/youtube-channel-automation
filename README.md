@@ -23,6 +23,7 @@ How to acquire credentials: https://developers.google.com/workspace/guides/creat
 How to acquire a refreshToken: https://developers.google.com/identity/protocols/oauth2
 
 app/youtube-uploader/token.json
+
 app/youtube-uploader/credentials.json
 
 ## Starting the project
