@@ -31,3 +31,7 @@ app/youtube-uploader/credentials.json
 ```
 npm start
 ```
+
+### Results
+Check out the league videos generated through this script
+https://www.youtube.com/@SnApLeague
