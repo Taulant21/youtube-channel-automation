@@ -1,6 +1,7 @@
 const ffmpeg = require('fluent-ffmpeg')
 
 const { getVideoFilters } = require('./video-filters')
+const { DateTime } = require('luxon')
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const ffprobePath = require('@ffprobe-installer/ffprobe').path
@@ -15,7 +16,7 @@ async function mergeVideos({ videosList, videosBaseUrl }) {
     videos: videosList,
     videosBaseUrl
   })
-  
+
   // Sort based on clip-views
   const sortedVideos = filteredVideos.sort(
     (a, b) => +b.split('__')[0] - +a.split('__')[0]
@@ -26,6 +27,8 @@ async function mergeVideos({ videosList, videosBaseUrl }) {
       getVideoDuration(`${videosBaseUrl}${videoName}`)
     )
   )
+
+  const videoDurationSeconds = durations.reduce((a, b) => a + b, 0)
 
   // Get the video filters(fade in/out effects - video/audio)
   const filters = getVideoFilters({ videosList: sortedVideos, durations })
@@ -56,10 +59,21 @@ async function mergeVideos({ videosList, videosBaseUrl }) {
         '-map',
         '[a]',
         '-c:v',
-        'libx264',
+        // Uses Nvidia (GPU) nvenc for encoding, which is faster based on your GPU
+        'h264_nvenc',
         '-c:a',
         'aac'
       ])
+      .on('progress', function (progress) {
+        const minutes = DateTime.fromSeconds(videoDurationSeconds).minute * 100
+
+        const diff = minutes - parseInt(progress.percent)
+
+        const currentProgress = 100 - parseInt((diff / minutes) * 100)
+
+        console.log(`Merging Progress -> ${currentProgress}%`);
+
+      })
       .output('output.mp4')
       .on('end', () => {
         console.log('Videos merged successfully!')

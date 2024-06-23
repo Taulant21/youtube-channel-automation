@@ -6,11 +6,10 @@ module.exports = { getTopDailyFeaturedClips }
 const supportedLanguages = new Set(['en', 'en-gb'])
 const clipStartTime = DateTime.now().minus({ days: 1 }).toISO()
 
-async function getTopDailyFeaturedClips({ twitchAuthToken }) {
+async function getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs }) {
   const { data: clips } = await axios.get(process.env.TWITCH_CLIPS_API_URL, {
     params: {
-      // This game id is for League
-      game_id: '21779',
+      game_id: gameConfigs.gameTwitchId,
       started_at: clipStartTime,
       is_featured: false,
       first: 100

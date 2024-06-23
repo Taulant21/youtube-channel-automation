@@ -9,6 +9,8 @@ const { uploadVideo } = require('./youtube-uploader/upload')
 
 module.exports = { startUpload }
 
+const gameCategoriesConfig = require('./category-configurations.json')
+
 const videosBaseUrl = `${__dirname}/video-download-handler/videos/`
 
 async function startUpload() {
@@ -16,33 +18,40 @@ async function startUpload() {
 
   console.log(`Login Succeeded, Token: ${twitchAuthToken}`)
 
-  const topDailyClips = await getTopDailyFeaturedClips({ twitchAuthToken })
+  for(let i = 0; i < gameCategoriesConfig.length; i++) {
+    const gameConfigs = gameCategoriesConfig[i]
 
-  try {
-    await downloadClips({ clips: topDailyClips })
-  } catch (e) {
-    console.log('Something went wrong while downloading clips')
-  }
+    console.log(`Game in progress: ${gameConfigs.gameName}`);
 
-  const videosList = fs.readdirSync(videosBaseUrl)
+    const topDailyClips = await getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs })
 
-  const mergeVideoStatus = await mergeVideos({
-    videosList,
-    videosBaseUrl
-  })
-
-  if (mergeVideoStatus.success) {
-    const uploadResponse = await uploadVideo({
-      credits: mergeVideoStatus.credits
+    try {
+      await downloadClips({ clips: topDailyClips })
+    } catch (e) {
+      console.log('Something went wrong while downloading clips')
+    }
+  
+    const videosList = fs.readdirSync(videosBaseUrl)
+  
+    const mergeVideoStatus = await mergeVideos({
+      videosList,
+      videosBaseUrl
     })
+  
+    if (mergeVideoStatus.success) {
+      const uploadResponse = await uploadVideo({
+        credits: mergeVideoStatus.credits,
+        gameConfigs
+      })
+  
+      console.log(uploadResponse)
 
-    console.log(uploadResponse)
-  } else {
-    throw new Error('Error while merging videos')
-  }
-
-  if (videosList.length > 0) {
-    cleanUpDownloadedClips({ videosList })
+      if(uploadResponse.success && videosList.length > 0) {
+        cleanUpDownloadedClips({ videosList })
+      }
+    } else {
+      throw new Error('Error while merging videos')
+    }
   }
 }
 

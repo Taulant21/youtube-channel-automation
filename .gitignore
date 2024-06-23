@@ -1,10 +1,9 @@
 .DS_Store
 npm-debug.log
 node_modules
-yt-auth
 
 app/youtube-uploader/token.json
-app/youtube-uploader/credentials.json
+app/category-configurations.json
 
 
 app/video-download-handler/videos
@@ -13,3 +12,4 @@ app/video-editor/intro.mp4
 output.mp4
 .env
 
+*.png
