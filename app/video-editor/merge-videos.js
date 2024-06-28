@@ -1,7 +1,6 @@
 const ffmpeg = require('fluent-ffmpeg')
 
 const { getVideoFilters } = require('./video-filters')
-const { DateTime } = require('luxon')
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const ffprobePath = require('@ffprobe-installer/ffprobe').path
@@ -65,14 +64,20 @@ async function mergeVideos({ videosList, videosBaseUrl }) {
         'aac'
       ])
       .on('progress', function (progress) {
-        const minutes = DateTime.fromSeconds(videoDurationSeconds).minute * 100
+        if(progress.frames > 0) {
+          const minutes = videoDurationSeconds
 
-        const diff = minutes - parseInt(progress.percent)
-
-        const currentProgress = 100 - parseInt((diff / minutes) * 100)
-
-        console.log(`Merging Progress -> ${currentProgress}%`);
-
+          const timeMark = progress.timemark.split(/:|\./)
+          
+          const currentSeconds = parseInt(timeMark[1]) * 60 + parseInt(timeMark[2])
+  
+          const diff = minutes - currentSeconds
+  
+          const currentProgress = 100 - parseInt((diff / minutes) * 100)
+  
+          console.log(`Merging Progress -> ${currentProgress}%`);
+  
+        }
       })
       .output('output.mp4')
       .on('end', () => {
