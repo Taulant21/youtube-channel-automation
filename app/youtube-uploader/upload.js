@@ -7,7 +7,7 @@ const { DateTime } = require('luxon')
 
 module.exports = { uploadVideo }
 
-async function uploadVideo({ credits, gameConfigs }) {
+async function uploadVideo({ credits, chapters, gameConfigs }) {
   const refinedCredits = [...new Set(credits)]
 
   const auth = await authorize({
@@ -23,7 +23,7 @@ async function uploadVideo({ credits, gameConfigs }) {
 
   const description = 'Note: The video contains the most viewed clips on the last 24 hours'
 
-  const credit = `\nCredits: \n${refinedCredits.join('\n')}`
+  const credit = `\nCredits: \n${chapters.join('\n')} \n\n${refinedCredits.join(' ')} `
 
   const finalDescription = gameConfigs.canUseOutlinks 
   ? `${description}${credit}`

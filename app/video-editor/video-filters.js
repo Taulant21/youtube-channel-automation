@@ -1,3 +1,5 @@
+const { DateTime } = require('luxon')
+
 module.exports = { getVideoFilters }
 
 function getVideoFilters({ videosList, durations }) {
@@ -6,15 +8,14 @@ function getVideoFilters({ videosList, durations }) {
   const concatVideoInputs = []
   const concatAudioInputs = []
   const streamerCredits = []
+  const chapters = []
+  let chapterTiming = 0
 
   videosList.forEach((file, index) => {
     const fadeOutStart = durations[index] - 1
     const fadeInStart = 0
 
-    const name = file.split('__')[1].replace(
-      '.mp4',
-      ''
-    )
+    const name = file.split('__')[1].replace('.mp4', '')
     const streamerName = `Twitch - twitch.tv/${name}`
 
     streamerCredits.push(`https://twitch.tv/${name}`)
@@ -58,6 +59,13 @@ function getVideoFilters({ videosList, durations }) {
     // Collect inputs for concatenation
     concatVideoInputs.push(`v${index}_with_text`)
     concatAudioInputs.push(`a${index}`)
+
+    const formattedChapterTime = formatChapterTime({ seconds: chapterTiming })
+    const chapterName = `${formattedChapterTime} ${name}`
+
+    chapters.push(chapterName)
+
+    chapterTiming += durations[index]
   })
 
   const videoConcatFilter = {
@@ -81,5 +89,21 @@ function getVideoFilters({ videosList, durations }) {
     outputs: 'a'
   }
 
-  return { videoFilters, audioFilters, videoConcatFilter, audioConcatFilter, streamerCredits }
+  return {
+    videoFilters,
+    audioFilters,
+    videoConcatFilter,
+    audioConcatFilter,
+    streamerCredits,
+    chapters
+  }
+}
+
+function formatChapterTime({ seconds }) {
+  const minutesFormatType = seconds < 600 ? 'm' : 'mm'
+  const time = DateTime.fromSeconds(parseInt(seconds)).toFormat(
+    `${minutesFormatType}:ss`
+  )
+
+  return time
 }
