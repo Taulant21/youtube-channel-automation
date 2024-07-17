@@ -21,7 +21,7 @@ async function getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs }) {
   })
 
   return clips.data
-    .filter((d) => supportedLanguages.has(d.language))
+    .filter((d) => supportedLanguages.has(d.language) && d.broadcaster_name !== "MIRWANA")
     .map((d) => {
       return {
         ...d,

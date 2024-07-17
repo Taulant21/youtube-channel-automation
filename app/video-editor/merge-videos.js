@@ -86,7 +86,8 @@ async function mergeVideos({ videosList, videosBaseUrl }) {
         resolve({
           status: 200,
           success: true,
-          credits: filters.streamerCredits
+          credits: filters.streamerCredits,
+          youtubechapters : filters.youtubeChapters
         })
       })
       .on('error', (err) => {

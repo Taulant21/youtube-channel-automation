@@ -40,7 +40,7 @@ async function startUpload() {
   
     if (mergeVideoStatus.success) {
       const uploadResponse = await uploadVideo({
-        credits: mergeVideoStatus.credits,
+        credits: mergeVideoStatus.youtubechapters,
         gameConfigs
       })
   

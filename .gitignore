@@ -11,5 +11,6 @@ app/video-editor/intro.mp4
 
 output.mp4
 .env
+thumbnails
 
 *.png
