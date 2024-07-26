@@ -35,13 +35,6 @@ function getVideoFilters({ videosList, durations }) {
       outputs: `v${index}`
     })
 
-    videoFilters.push({
-      filter: 'drawtext',
-      options: `text='${streamerName}':x=25:y=100:fontsize=40:fontcolor=white:box=1:boxcolor=black@0.5:borderw=10`,
-      inputs: `v${index}`,
-      outputs: `v${index}_with_text`
-    })
-
     audioFilters.push({
       filter: 'afade',
       options: `t=out:st=${fadeOutStart}:d=1`,
@@ -57,7 +50,7 @@ function getVideoFilters({ videosList, durations }) {
     })
 
     // Collect inputs for concatenation
-    concatVideoInputs.push(`v${index}_with_text`)
+    concatVideoInputs.push(`v${index}`)
     concatAudioInputs.push(`a${index}`)
 
     const formattedChapterTime = formatChapterTime({ seconds: chapterTiming })

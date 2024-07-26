@@ -4,6 +4,7 @@ node_modules
 
 app/youtube-uploader/token.json
 app/category-configurations.json
+app/twitch-manual-clip-links.json
 
 
 app/video-download-handler/videos

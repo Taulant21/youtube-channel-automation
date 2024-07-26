@@ -10,6 +10,7 @@ const { uploadVideo } = require('./youtube-uploader/upload')
 module.exports = { startUpload }
 
 const gameCategoriesConfig = require('./category-configurations.json')
+const twitchManualLinks = require('./twitch-manual-clip-links.json')
 
 const videosBaseUrl = `${__dirname}/video-download-handler/videos/`
 
@@ -23,7 +24,7 @@ async function startUpload() {
 
     console.log(`Game in progress: ${gameConfigs.gameName}`);
 
-    const topDailyClips = await getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs })
+    const topDailyClips = await getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs, twitchManualLinks })
 
     try {
       await downloadClips({ clips: topDailyClips })

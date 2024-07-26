@@ -17,9 +17,7 @@ async function uploadVideo({ credits, chapters, gameConfigs }) {
 
   const videoPath = path.resolve('output.mp4')
   const videoSize = fs.statSync(videoPath).size
-  const title = `${gameConfigs.youtubeVideoTitle} ${DateTime.now().toFormat(
-    'dd/MM/yyyy'
-  )}`
+  const title = gameConfigs.youtubeVideoTitle
 
   const description = 'Note: The video contains the most viewed clips on the last 24 hours'
 
