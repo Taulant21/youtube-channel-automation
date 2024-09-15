@@ -17,6 +17,6 @@ async function getTwitchAuthToken() {
       }
     }
   )
-
+  
   return accessTokenResponse?.data?.access_token
 }
