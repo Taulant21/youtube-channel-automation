@@ -3,10 +3,10 @@ const fs = require('fs')
 
 module.exports = { downloadClips }
 
-async function downloadClips({ clips }) {
-  for (let i = 0; i < clips.length; i++) {
+async function downloadClips({ clips , videoLink }) {
+  for (let i = 0; i < videoLink.length; i++) {
     await new Promise((resolve, reject) => {
-      https.get(clips[i].downloadUrl, async (res) => {
+      https.get(videoLink[i], async (res) => {
         const fileStream = fs.createWriteStream(
           `${__dirname}/videos/${clips[i].view_count}__${clips[i].broadcaster_name.toLowerCase()}.mp4`
         )

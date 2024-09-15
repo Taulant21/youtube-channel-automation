@@ -6,12 +6,12 @@ const { getTopDailyFeaturedClips } = require('./twitch/clips')
 const { downloadClips } = require('./video-download-handler/downloadVideos')
 const { mergeVideos } = require('./video-editor/merge-videos')
 const { uploadVideo } = require('./youtube-uploader/upload')
+const { getVideoClips } = require('./twitch/getVideoClip')
 
 module.exports = { startUpload }
 
 const gameCategoriesConfig = require('./category-configurations.json')
 const twitchManualLinks = require('./twitch-manual-clip-links.json')
-
 const videosBaseUrl = `${__dirname}/video-download-handler/videos/`
 
 async function startUpload() {
@@ -26,8 +26,11 @@ async function startUpload() {
 
     const topDailyClips = await getTopDailyFeaturedClips({ twitchAuthToken, gameConfigs, twitchManualLinks })
 
+
+    const videos = await getVideoClips({Clips: topDailyClips})
+
     try {
-      await downloadClips({ clips: topDailyClips })
+      await downloadClips({ clips: topDailyClips , videoLink : videos })
     } catch (e) {
       console.log('Something went wrong while downloading clips')
     }
